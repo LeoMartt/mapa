@@ -132,7 +132,7 @@
     return pin;
   }
 
-  function createPhotoStage(stage, index) {
+  function createPhotoStage(stage) {
     const card = document.createElement("div");
     card.className = "stage-card";
 
@@ -191,9 +191,10 @@
     article.className = `stage ${stage.side || "center"}`;
 
     const pin = createPin(index);
+
     const content = stage.type === "message"
       ? createMessageStage(stage)
-      : createPhotoStage(stage, index);
+      : createPhotoStage(stage);
 
     article.appendChild(pin);
     article.appendChild(content);
@@ -277,10 +278,12 @@
 
   noBtn.addEventListener("mouseenter", moveNoButton);
   noBtn.addEventListener("focus", moveNoButton);
+
   noBtn.addEventListener("touchstart", function (e) {
     e.preventDefault();
     moveNoButton();
   }, { passive: false });
+
   noBtn.addEventListener("click", function () {
     showModal("no");
   });
