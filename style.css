@@ -17,6 +17,9 @@
 
 html {
   scroll-behavior: smooth;
+
+  /* Safari/iOS: evita zoom automático estranho em fontes */
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -28,6 +31,14 @@ body {
     radial-gradient(circle at 80% 20%, rgba(255, 228, 196, 0.9), transparent 28%),
     linear-gradient(180deg, var(--bg-1), var(--bg-2) 38%, #fff4e4 100%);
   overflow-x: hidden;
+  min-height: 100%;
+
+  /* Safari/iOS: melhora renderização das fontes */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  /* Safari/iOS: remove destaque azul/cinza ao tocar em botões/links */
+  -webkit-tap-highlight-color: transparent;
 }
 
 body::before {
@@ -56,6 +67,10 @@ body::after {
 
 .hero {
   min-height: 100vh;
+
+  /* Safari/iOS moderno: melhora altura da tela com barra do navegador */
+  min-height: 100svh;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,7 +86,11 @@ body::after {
   background: rgba(255, 250, 243, 0.83);
   border: 1px solid rgba(125, 53, 47, 0.16);
   box-shadow: var(--shadow);
+
+  /* Safari precisa do prefixo em algumas versões */
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+
   position: relative;
   overflow: hidden;
 }
@@ -127,6 +146,7 @@ body::after {
   padding: 0.7rem 1.05rem;
   background: rgba(255, 255, 255, 0.45);
   transition: transform 0.25s ease, background 0.25s ease;
+  touch-action: manipulation;
 }
 
 .scroll-hint:hover {
@@ -186,9 +206,18 @@ body::after {
   opacity: 0.54;
   filter: drop-shadow(0 4px 0 rgba(255, 255, 255, 0.85));
   animation: dashMove 22s linear infinite;
+
+  /* Safari antigo */
+  -webkit-animation: dashMove 22s linear infinite;
 }
 
 @keyframes dashMove {
+  to {
+    stroke-dashoffset: -500;
+  }
+}
+
+@-webkit-keyframes dashMove {
   to {
     stroke-dashoffset: -500;
   }
@@ -239,6 +268,11 @@ body::after {
   box-shadow: var(--shadow);
   transform: rotate(var(--rotate, -1deg));
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  /* Safari: ajuda a evitar flicker em transform */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .stage-card:hover {
@@ -252,6 +286,10 @@ body::after {
   overflow: hidden;
   aspect-ratio: 4 / 3;
   background: #ead1bd;
+
+  /* Safari: evita flicker no arredondamento com imagem */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
 }
 
 .photo-wrap img {
@@ -261,6 +299,11 @@ body::after {
   display: block;
   filter: sepia(0.08) saturate(1.04);
   transition: transform 0.45s ease;
+
+  /* Safari: suaviza transform da imagem */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .stage-card:hover img {
@@ -290,7 +333,7 @@ body::after {
   font-size: 1rem;
 }
 
-/* PINO/NÚMERO AGORA FORA DOS CARDS */
+/* PINO/NÚMERO FORA DOS CARDS */
 .map-pin {
   position: relative;
   z-index: 3;
@@ -308,7 +351,6 @@ body::after {
   font-weight: 700;
 }
 
-/* posição do pino ao lado do conteúdo */
 .stage.left .map-pin {
   order: 2;
   margin-left: 0.25rem;
@@ -387,6 +429,10 @@ body::after {
 
 .final-section {
   min-height: 100vh;
+
+  /* Safari/iOS moderno: corrige altura considerando a barra do Safari */
+  min-height: 100svh;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -462,6 +508,8 @@ body::after {
   letter-spacing: 0.03em;
   box-shadow: 0 12px 28px rgba(93, 50, 38, 0.16);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  touch-action: manipulation;
+  cursor: pointer;
 }
 
 .btn-love:hover {
@@ -504,6 +552,10 @@ body::after {
   box-shadow: 0 28px 80px rgba(74, 47, 42, 0.28);
   overflow: hidden;
   position: relative;
+
+  /* Safari: evita flicker no modal */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .modal-content::before {
@@ -583,6 +635,7 @@ body::after {
   font-size: 1rem;
   box-shadow: 0 14px 28px rgba(37, 211, 102, 0.28);
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  touch-action: manipulation;
 }
 
 .whatsapp-link::before {
@@ -636,11 +689,31 @@ body::after {
   color: rgba(184, 92, 80, 0.26);
   font-size: 1.6rem;
   animation: floatHeart 9s linear infinite;
+
+  /* Safari antigo */
+  -webkit-animation: floatHeart 9s linear infinite;
+
   pointer-events: none;
   z-index: -1;
 }
 
 @keyframes floatHeart {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-115vh) rotate(280deg);
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes floatHeart {
   0% {
     transform: translateY(0) rotate(0deg);
     opacity: 0;
@@ -707,5 +780,13 @@ body::after {
 
   .answer-area {
     min-height: 180px;
+  }
+}
+
+/* Safari/iOS mais antigo: fallback para altura de tela */
+@supports (-webkit-touch-callout: none) {
+  .hero,
+  .final-section {
+    min-height: -webkit-fill-available;
   }
 }
